@@ -20,6 +20,8 @@ do
 		done
 done
 
+echo "We will now delete leftover TF2 folders.
+read -p "Stop here if you are using syslink for catbot-libraries
 for p in $(ls -1 /home | grep catbot-)
 do
 	echo "Removing leftover folder $p"
