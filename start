@@ -13,14 +13,14 @@ xhost +
 
 /opt/cathook/ipc/bin/server -s >/dev/null &
 echo $! >/tmp/cat-ipc-server.pid
-pushd account-generator
+pushd account-generator || exit
 node app >/tmp/cathook-accgen.log &
-popd
-pushd cathook-ipc-web-panel
+popd || exit
+pushd cathook-ipc-web-panel || exit
 sudo bash ./run.sh &
-popd
+popd || exit
 
 sleep 5;
 
-echo "Account generator password: `cat /tmp/cat-accgen2-password`"
-echo "IPC Web Panel password: `cat /tmp/cat-webpanel-password`"
+echo "Account generator password: $(cat /tmp/cat-accgen2-password)"
+echo "IPC Web Panel password: $(cat /tmp/cat-webpanel-password)"
