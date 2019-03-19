@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-read -p "Press ENTER to continue"
+read -rp "Press ENTER to continue"
 
-kisak=`cat kisak`
+kisak=$(cat kisak)
 
 if [ -f ./users ]; then
-    for i in $(seq 1 $(cat ./users))
+    for i in $(seq 1 "$(cat ./users)")
     do
         if ! [ -d "/home/$kisak-$i" ]; then
             echo "No $kisak $i";
             continue;
         fi
         echo "Deleting user $kisak-$i"
-        sudo groupdel $kisak-$i
-        sudo userdel -r $kisak-$i
+        sudo groupdel "$kisak"-"$i"
+        sudo userdel -r "$kisak"-"$i"
     done
 fi
 sudo groupdel "$(cat kisak)s"
