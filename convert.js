@@ -16,11 +16,7 @@ var accountsStr = [];
 var array = fs.readFileSync("accounts.txt").toString().replace(/\n\n/g, "\n").split("\n");
 array.pop();
 for (i in array) {
-        <<<<<<< HEAD
     accountsStr.push(array[i]);
-        =======
-        accounts_str.push(array[i]);
-        >>>>>>> parent of 081eb83... Leading spaces to tabs
 }
 // Keep track of processed accs and their respective database indexes
 var processedAccs = 0;
