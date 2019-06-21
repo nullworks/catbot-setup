@@ -39,5 +39,6 @@ accountsStr.forEach(function (i, idx, arr) {
 	}
 });
 // Write last few accs
-if (processedAccs)
+if (processedAccs) {
 	fs.writeFileSync(`accounts${dbIdx}.cg.json`, JSON.stringify(accounts), "utf8");
+}
