@@ -33,7 +33,7 @@ accountsStr.forEach(function (i, idx, arr) {
 	processedAccs++;
 	if (processedAccs >= 1000) {
 		processedAccs = 0;
-		fs.writeFileSync(`accounts${db_idx}.cg.json`, JSON.stringify(accounts), "utf8");
+		fs.writeFileSync(`accounts${dbIdx}.cg.json`, JSON.stringify(accounts), "utf8");
 		dbIdx++;
 		accounts = JSON.parse("{ \"array\": [], \"used\": 0 }");
 	}
