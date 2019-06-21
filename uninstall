@@ -4,16 +4,16 @@ read -p "Press ENTER to continue"
 kisak=`cat kisak`
 
 if [ -f ./users ]; then
-	for i in $(seq 1 $(cat ./users))
-	do
-		if ! [ -d "/home/$kisak-$i" ]; then
-			echo "No $kisak $i";
-			continue;
-		fi
-		echo "Deleting user $kisak-$i"
-		sudo groupdel $kisak-$i
-		sudo userdel -r $kisak-$i
-	done
+    for i in $(seq 1 $(cat ./users))
+    do
+        if ! [ -d "/home/$kisak-$i" ]; then
+            echo "No $kisak $i";
+            continue;
+        fi
+        echo "Deleting user $kisak-$i"
+        sudo groupdel $kisak-$i
+        sudo userdel -r $kisak-$i
+    done
 fi
 sudo groupdel "$(cat kisak)s"
 rm -rf ./account-generator
