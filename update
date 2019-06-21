@@ -10,8 +10,8 @@ cmake -DCMAKE_BUILD_TYPE=Release -DDrawType:STRING="No Visuals" -DVACBypass=1 -D
 numcpu=$(grep -c ^processor /proc/cpuinfo)
 make -j$numcpu
 if ! [ -e "bin/libcathook.so" ]; then
-    echo "FATAL: Build failed"
-    exit
+	echo "FATAL: Build failed"
+	exit
 fi
 popd
 sudo mkdir -p "/opt/cathook/bin/"

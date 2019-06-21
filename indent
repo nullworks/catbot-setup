@@ -4,12 +4,12 @@
 
 (defun indent-files (files)
   (cond (files
-         (find-file (car files))
-         (untabify (point-min) (point-max))
-         (indent-region (point-min) (point-max))
-         (save-buffer)
-         (kill-buffer)
-         (indent-files (cdr files)))))
+		 (find-file (car files))
+		 (untabify (point-min) (point-max))
+		 (indent-region (point-min) (point-max))
+		 (save-buffer)
+		 (kill-buffer)
+		 (indent-files (cdr files)))))
 
 (indent-files command-line-args-left)
 

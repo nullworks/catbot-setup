@@ -2,8 +2,8 @@
 set -e
 
 if [ $EUID == 0 ]; then
-    echo "This script must not be run as root"
-    exit
+	echo "This script must not be run as root"
+	exit
 fi
 
 if ! [ -e "/opt/cathook/" ]; then
@@ -13,8 +13,8 @@ if ! [ -e "/opt/cathook/" ]; then
 fi
 
 if [ ! -x "$(command -v touch)" ]; then
-    echo "Touch doesn't exist. Please install it."
-    exit
+	echo "Touch doesn't exist. Please install it."
+	exit
 fi
 
 if [ ! -x "$(command -v npm)" ]; then
@@ -23,129 +23,129 @@ if [ ! -x "$(command -v npm)" ]; then
 fi
 
 if [ ! -d "./cathook" ]; then
-    git clone --recursive https://github.com/nullworks/cathook
+	git clone --recursive https://github.com/nullworks/cathook
 fi
 
 
 if [ ! -f ./kisak ]; then
-    echo Generating username and adding groups!
-    name=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 6 | head -n 1)
-    echo $name > kisak
+	echo Generating username and adding groups!
+	name=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 6 | head -n 1)
+	echo $name > kisak
 
-    sudo groupadd `cat kisak`s
-    sudo usermod -a -G `cat kisak`s $USER
+	sudo groupadd `cat kisak`s
+	sudo usermod -a -G `cat kisak`s $USER
 fi
 
 if ! [ -e "/opt/steamapps" ]; then
-    steamapps="/home/$USER/.steam/steam/steamapps/"
+	steamapps="/home/$USER/.steam/steam/steamapps/"
 
-    while true; do
-        read -p "Is $steamapps your steamapps directory? y/n " yn
-        case $yn in
-            [Yy]* ) break;;
-            [Nn]* ) exit;;
-            * ) echo "Please answer yes or no.";;
-        esac
-    done
-    
-    touch link
-    sudo ln -s "$steamapps" "/opt/steamapps"
+	while true; do
+		read -p "Is $steamapps your steamapps directory? y/n " yn
+		case $yn in
+			[Yy]* ) break;;
+			[Nn]* ) exit;;
+			* ) echo "Please answer yes or no.";;
+		esac
+	done
+	
+	touch link
+	sudo ln -s "$steamapps" "/opt/steamapps"
 
-    # fuck permissions!!!
+	# fuck permissions!!!
 
-    sudo chown -h $USER:`cat kisak`s "/opt/steamapps"
-    sudo chown -R $USER:`cat kisak`s "/opt/steamapps"
-    sudo chmod -R g+rwx "/opt/steamapps"
-    sudo chmod +x "/opt"
-    sudo chmod +x "/opt/steamapps"
-    sudo chmod -R go+X "$steamapps"
-    cd $(realpath /opt/steamapps) ; while [ $(pwd) != "/" ]; do echo $(pwd); sudo chmod +x .; cd ..; done
+	sudo chown -h $USER:`cat kisak`s "/opt/steamapps"
+	sudo chown -R $USER:`cat kisak`s "/opt/steamapps"
+	sudo chmod -R g+rwx "/opt/steamapps"
+	sudo chmod +x "/opt"
+	sudo chmod +x "/opt/steamapps"
+	sudo chmod -R go+X "$steamapps"
+	cd $(realpath /opt/steamapps) ; while [ $(pwd) != "/" ]; do echo $(pwd); sudo chmod +x .; cd ..; done
 fi
 
 if [ ! -f ./users ]; then
-    while true; do
-        re='^[0-9]+$'
-        read -p "How many bots would you like to host? " yournumber
-        if [[ $yournumber =~ $re ]] ; then
-            echo $yournumber > ./users
-            for i in $(seq 1 $yournumber)
-            do
-                if [ -d "/home/`cat kisak`-$i" ]; then
-                    echo "`cat kisak`-$i already exists"
-                    continue
-                fi
-                echo "Creating user `cat kisak`-$i"
-                sudo useradd -m `cat kisak`-$i
-                sudo usermod -g `cat kisak`s `cat kisak`-$i
-                sudo mkdir -p /home/`cat kisak`-$i
-                sudo chown `cat kisak`-$i:`cat kisak`s /home/`cat kisak`-$i
-                sudo -H -u `cat kisak`-$i bash -c "mkdir -p /home/`cat kisak`-$i/.local/share/Steam"
-                sudo -H -u `cat kisak`-$i bash -c "ln -s \"/opt/steamapps\" \"/home/`cat kisak`-$i/.local/share/Steam/steamapps\""
-                sudo -H -u `cat kisak`-$i bash -c "mkdir -p ~/.steam"
-                sudo -H -u `cat kisak`-$i bash -c "touch ~/.steam/steam_install_agreement.txt"
-            done
-            break
-        fi
-        echo "Error: Not a number" >&2
-    done
+	while true; do
+		re='^[0-9]+$'
+		read -p "How many bots would you like to host? " yournumber
+		if [[ $yournumber =~ $re ]] ; then
+			echo $yournumber > ./users
+			for i in $(seq 1 $yournumber)
+			do
+				if [ -d "/home/`cat kisak`-$i" ]; then
+					echo "`cat kisak`-$i already exists"
+					continue
+				fi
+				echo "Creating user `cat kisak`-$i"
+				sudo useradd -m `cat kisak`-$i
+				sudo usermod -g `cat kisak`s `cat kisak`-$i
+				sudo mkdir -p /home/`cat kisak`-$i
+				sudo chown `cat kisak`-$i:`cat kisak`s /home/`cat kisak`-$i
+				sudo -H -u `cat kisak`-$i bash -c "mkdir -p /home/`cat kisak`-$i/.local/share/Steam"
+				sudo -H -u `cat kisak`-$i bash -c "ln -s \"/opt/steamapps\" \"/home/`cat kisak`-$i/.local/share/Steam/steamapps\""
+				sudo -H -u `cat kisak`-$i bash -c "mkdir -p ~/.steam"
+				sudo -H -u `cat kisak`-$i bash -c "touch ~/.steam/steam_install_agreement.txt"
+			done
+			break
+		fi
+		echo "Error: Not a number" >&2
+	done
 fi
 
 if [ -f ./users ] && [ ! -f ./steams ]; then
-    if [ ! -x "$(command -v xhost)" ]; then
-        echo "XHost doesn't exist. Please install it."
-        exit
-    fi
-    xhost + >/dev/null
-    for i in $(seq 1 $(cat ./users))
-    do
-        echo "Starting Steam for `cat kisak` $i"
-        sudo su - `cat kisak`-$i -c "DISPLAY=:0 steam &>/tmp/steam-`cat kisak`-$i.log 2>&1 &"
-    done
-    read -p "Press enter if all steams have reached the login screen. (This will kill ALL steams) "
-    touch ./steams
-    sudo killall steam
+	if [ ! -x "$(command -v xhost)" ]; then
+		echo "XHost doesn't exist. Please install it."
+		exit
+	fi
+	xhost + >/dev/null
+	for i in $(seq 1 $(cat ./users))
+	do
+		echo "Starting Steam for `cat kisak` $i"
+		sudo su - `cat kisak`-$i -c "DISPLAY=:0 steam &>/tmp/steam-`cat kisak`-$i.log 2>&1 &"
+	done
+	read -p "Press enter if all steams have reached the login screen. (This will kill ALL steams) "
+	touch ./steams
+	sudo killall steam
 fi
 
 if [ ! -f /opt/cathook/bin/libcathook-textmode.so ]; then
-    numcpu=$(grep -c ^processor /proc/cpuinfo)
-    mkdir -p build
-    pushd build
-    cmake -DCMAKE_BUILD_TYPE=Release -DDrawType:STRING="No Visuals" -DVACBypass=1 -DTextmode=1 -DEnableWarnings=0 -DEnableOnlineFeatures=0 ../cathook/
-    make -j$numcpu
-    if ! [ -e "bin/libcathook.so" ]; then
-        echo "FATAL: Build failed"
-        exit
-    fi
-    popd
-    sudo mkdir -p "/opt/cathook/bin/"
-    sudo cp "build/bin/libcathook.so" "/opt/cathook/bin/libcathook-textmode.so"
-    sudo chmod -R 0755 /opt/cathook/data/configs/
+	numcpu=$(grep -c ^processor /proc/cpuinfo)
+	mkdir -p build
+	pushd build
+	cmake -DCMAKE_BUILD_TYPE=Release -DDrawType:STRING="No Visuals" -DVACBypass=1 -DTextmode=1 -DEnableWarnings=0 -DEnableOnlineFeatures=0 ../cathook/
+	make -j$numcpu
+	if ! [ -e "bin/libcathook.so" ]; then
+		echo "FATAL: Build failed"
+		exit
+	fi
+	popd
+	sudo mkdir -p "/opt/cathook/bin/"
+	sudo cp "build/bin/libcathook.so" "/opt/cathook/bin/libcathook-textmode.so"
+	sudo chmod -R 0755 /opt/cathook/data/configs/
 fi
 
 if [ ! -d "./account-generator" ]; then
-    git clone --recursive https://github.com/nullworks/account-generator
-    pushd account-generator
-    ./install.sh
-    popd
+	git clone --recursive https://github.com/nullworks/account-generator
+	pushd account-generator
+	./install.sh
+	popd
 fi
 
 if [ ! -d "./cathook-ipc-server" ]; then
-    git clone --recursive https://github.com/nullworks/cathook-ipc-server
-    pushd cathook-ipc-server
-    ./install.sh
-    popd
+	git clone --recursive https://github.com/nullworks/cathook-ipc-server
+	pushd cathook-ipc-server
+	./install.sh
+	popd
 fi
 
 if [ ! -d "./cathook-ipc-web-panel" ]; then
-    git clone --recursive https://github.com/nullworks/cathook-ipc-web-panel
-    pushd cathook-ipc-web-panel
-    ./install.sh
-    popd
+	git clone --recursive https://github.com/nullworks/cathook-ipc-web-panel
+	pushd cathook-ipc-web-panel
+	./install.sh
+	popd
 fi
 
 if [ ! -d "./cathook-ipc-web-panel/logs" ]; then
-    mkdir -p ./cathook-ipc-web-panel/logs
-    touch ./cathook-ipc-web-panel/logs/main.log
+	mkdir -p ./cathook-ipc-web-panel/logs
+	touch ./cathook-ipc-web-panel/logs/main.log
 fi
 
 echo "Installation finished. Please ensure that all navmashes are inside your map folder (https://github.com/nullworks/catbot-database)."
