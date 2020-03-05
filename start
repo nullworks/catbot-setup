@@ -24,7 +24,9 @@ if [ -e "/tmp/ncat-cathook-webpanel.pid" ] && ps -p `cat "/tmp/ncat-cathook-webp
     echo Account generator already running.
 else
     pushd cathook-ipc-web-panel
-    sudo STEAM_LD_PRELOAD="$(cd ../ && pwd)/just-disable-vac/build/bin64/libvpcfs.so.0:$(cd ../ && pwd)/just-disable-vac/build/bin32/libvpcfs.so.0" bash ./run.sh &
+    pr_var="$(cd ../ && pwd)/just-disable-vac/build/bin64/libvpcfs.so.0:$(cd ../ && pwd)/just-disable-vac/build/bin32/libvpcfs.so.0"
+    pr_var=${pr_var/\ /\\\ }
+    sudo STEAM_LD_PRELOAD=$pr_var bash ./run.sh &
     popd
 fi
 
