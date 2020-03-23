@@ -13,22 +13,22 @@ if ! [ -e "/opt/cathook/" ]; then
 fi
 
 if [ ! -x "$(command -v touch)" ]; then
-    echo "Touch doesn't exist. Please install it."
+    echo "Touch doesn't exist. Please install it. (touch)"
     exit
 fi
 
 if [ ! -x "$(command -v npm)" ]; then
-    echo "NPM doesn't exist. Please install it."
+    echo "NPM doesn't exist. Please install it. (npm)"
     exit
 fi
 
 if [ ! -x "$(command -v firejail)" ]; then
-    echo "Firejail doesn't exist. Please install it."
+    echo "Firejail doesn't exist. Please install it. (firejail)"
     exit
 fi
 
 if [ ! -x "$(command -v route)" ] && [ ! -x /sbin/route ]; then
-    echo "Route doesn't exist. Please install it (net-tools on archlinux/manjaro)."
+    echo "Route doesn't exist. Please install it. (net-tools)"
     exit
 fi
 
