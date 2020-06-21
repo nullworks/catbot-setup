@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+sudo echo "got me some sudo?" > /dev/null
 git pull
 pushd cathook
 git pull
