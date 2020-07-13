@@ -200,7 +200,6 @@ if [ ! -d "./cathook-ipc-web-panel/logs" ]; then
 fi
 
 echo "Installation finished. Please ensure that all navmeshes are inside your map folder (see https://gitlab.com/nullworks/cathook/catbot-database)."
-
 echo
 echo "The web-panel and account storage can be started with ./start"
 echo
