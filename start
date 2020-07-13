@@ -37,11 +37,10 @@ else
 fi
 
 if [ -x "$(command -v pulseaudio)" ]; then
-    echo "Starting Pulseaudio daemons"
-    for i in $(seq 1 $(cat users))
-    do
-        sudo su - $(cat kisak)-$i -c "pulseaudio --daemonize=yes"
-    done
+    echo "Setting up Pulseaudio socket"
+    pulse=$(pgrep -u "$USER" pulseaudio);
+    ([ ! -z "$pulse" ]) && pulseaudio --start &>/dev/null &
+    pactl load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse.sock > /tmp/pulsemodule.id
 fi
 
 sleep 5;

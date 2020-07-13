@@ -16,11 +16,9 @@ ipcserver=$( ps faux | grep '/opt/cathook/ipc/bin/server' | grep -vw grep | awk 
 [ ! -z "$ipcserver" ] && sudo kill ${ipcserver};
 ipcconsole=$( ps faux | grep '/opt/cathook/ipc/bin/console' | grep -vw grep | awk '{ print $2 }' );
 [ ! -z "$ipcconsole" ] && sudo kill ${ipcconsole};
-if [ -x "$(command -v pulseaudio)" ]; then
-    for i in $(seq 1 $(cat users))
-    do
-        sudo killall pulseaudio -u $(cat kisak)-$i &>/dev/null
-    done
+if [ -e "/tmp/pulsemodule.id" ]; then
+    pactl unload-module $(cat /tmp/pulsemodule.id)
+    rm /tmp/pulsemodule.id
 fi
 
 count=$(cat ./users);

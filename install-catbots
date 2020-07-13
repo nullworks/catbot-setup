@@ -8,7 +8,7 @@ fi
 
 if ! [ -e "/opt/cathook/" ]; then
     echo "Please install Cathook on your main TF2, first."
-    echo "https://github.com/nullworks/cathook"
+    echo "https://cathook.club/s/ch/git"
     exit
 fi
 
@@ -43,7 +43,8 @@ if [ ! -x "$(command -v xhost)" ]; then
 fi
 
 if [ ! -d "./cathook" ]; then
-    git clone --recursive https://github.com/nullworks/cathook
+    URL="$(curl --max-time 10 -Ls -o /dev/null -w %{url_effective} https://cathook.club/s/ch/git || echo error)"
+    git clone --recursive $URL
 fi
 
 
@@ -173,21 +174,21 @@ if [ ! -d "./just-disable-vac" ]; then
 fi
 
 if [ ! -d "./account-generator" ]; then
-    git clone --recursive https://github.com/nullworks/account-generator
+    git clone --recursive https://gitlab.com/nullworks/cathook/account-generator
     pushd account-generator
     ./install.sh
     popd
 fi
 
 if [ ! -d "./cathook-ipc-server" ]; then
-    git clone --recursive https://github.com/nullworks/cathook-ipc-server
+    git clone --recursive https://gitlab.com/nullworks/cathook/cathook-ipc-server
     pushd cathook-ipc-server
     ./install.sh
     popd
 fi
 
 if [ ! -d "./cathook-ipc-web-panel" ]; then
-    git clone --recursive https://github.com/nullworks/cathook-ipc-web-panel
+    git clone --recursive https://gitlab.com/nullworks/cathook/cathook-ipc-web-panel
     pushd cathook-ipc-web-panel
     ./install.sh
     popd
@@ -198,7 +199,8 @@ if [ ! -d "./cathook-ipc-web-panel/logs" ]; then
     touch ./cathook-ipc-web-panel/logs/main.log
 fi
 
-echo "Installation finished. Please ensure that all navmeshes are inside your map folder (https://github.com/nullworks/catbot-database)."
+echo "Installation finished. Please ensure that all navmeshes are inside your map folder (see https://gitlab.com/nullworks/cathook/catbot-database)."
+
 echo
 echo "The web-panel and account storage can be started with ./start"
 echo
