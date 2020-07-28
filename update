@@ -50,6 +50,13 @@ popd
 echo "Fetching navmeshes..."
 if [ -d ./catbot-database ]; then
 	pushd catbot-database
+
+	# this is a hotfix for the previous version of this script not setting permissions properly
+	if [ $(git rev-parse HEAD) == "cf31ff4fc05f4bfaffc3bba9260fab2266f95dd7" ]; then
+		echo "Resetting permissions on catbot-database navmeshes (bugfix)"
+		git reset --hard
+	fi
+
 	git pull
 	popd
 else
@@ -57,7 +64,7 @@ else
 fi
 
 echo "Copying navmeshes..."
-chmod 755 catbot-database/nav\ meshes/*.nav
-rsync --perms catbot-database/nav\ meshes/*.nav ~/.steam/steam/steamapps/common/Team\ Fortress\ 2/tf/maps/
+rsync catbot-database/nav\ meshes/*.nav ~/.steam/steam/steamapps/common/Team\ Fortress\ 2/tf/maps/
+chmod 755 ~/.steam/steam/steamapps/common/Team\ Fortress\ 2/tf/maps/*.nav # fixup permissions so tf2 is happy
 
 echo "Done."
