@@ -51,7 +51,7 @@ echo "Fetching navmeshes..."
 if [ -d ./catbot-database ]; then
 	pushd catbot-database
 	git fetch --depth 1 https://github.com/nullworks/catbot-database
-	git reset --hard
+	git reset --hard FETCH_HEAD
 	popd
 else
 	git clone --depth 1 https://github.com/nullworks/catbot-database
