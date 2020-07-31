@@ -50,7 +50,7 @@ popd
 echo "Fetching navmeshes..."
 if [ -d ./catbot-database ]; then
 	pushd catbot-database
-	git fetch --depth 1 https://github.com/nullworks/catbot-database
+	git fetch --depth 1
 	git reset --hard origin/master
 	popd
 else
