@@ -123,8 +123,15 @@ if [ -f ./users ] && [ ! -f ./steams ]; then
     if ! sudo test -x "/home/$basename-1/.local/share/Steam/steam"; then
         echo Garbage distro detected.
         IS_GARBAGE_DISTRO=true
-        sudo rm -r "/home/$basename-1/.steam/steam/steamapps"
-        sudo -H -u $basename-1 bash -c "ln -s \"/opt/steamapps\" \"/home/$basename-1/.steam/steam\""
+        if sudo test -x "/home/$basename-1/.steam/debian-installation"; then 
+            echo Mega Garbage distro detected.
+            IS_MEGA_GARBAGE_DISTRO=true
+            sudo rm -r "/home/$basename-1/.steam/debian-installation/steamapps"
+            sudo -H -u $basename-1 bash -c "ln -s \"/opt/steamapps\" \"/home/$basename-1/.steam/debian-installation\""
+        else 
+            sudo rm -r "/home/$basename-1/.steam/steam/steamapps"
+            sudo -H -u $basename-1 bash -c "ln -s \"/opt/steamapps\" \"/home/$basename-1/.steam/steam\""
+        fi
     else
         IS_GARBAGE_DISTRO=false
         sudo rm -r "/home/$basename-1/.local/share/Steam/steamapps"
@@ -139,6 +146,15 @@ if [ -f ./users ] && [ ! -f ./steams ]; then
             if [ "$IS_GARBAGE_DISTRO" == true ]; then
                 sudo rsync -av --info=progress2 --info=name0 /home/$basename-1/.steam /home/$basename-$i/
                 sudo chown -R $basename-$i:$basename-$i "/home/$basename-$i/.steam"
+                if [ "$IS_MEGA_GARBAGE_DISTRO" == true ]; then
+                	sudo ln -sfn /home/$basename-$i/.steam/bin32 /home/$basename-$i/.steam/bin
+	                sudo ln -sfn /home/$basename-$i/.steam/debian-installation/ubuntu12_32 /home/$basename-$i/.steam/bin32
+	                sudo ln -sfn /home/$basename-$i/.steam/debian-installation/ubuntu12_64 /home/$basename-$i/.steam/bin64
+	                sudo ln -sfn /home/$basename-$i/.steam/debian-installation /home/$basename-$i/.steam/root
+	                sudo ln -sfn /home/$basename-$i/.steam/debian-installation/linux32 /home/$basename-$i/.steam/sdk32
+	                sudo ln -sfn /home/$basename-$i/.steam/debian-installation/linux32 /home/$basename-$i/.steam/sdk64
+	                sudo ln -sfn /home/$basename-$i/.steam/debian-installation /home/$basename-$i/.steam/steam
+                fi
             else
                 sudo -H -u $basename-$i bash -c "mkdir -p /home/$basename-$i/.local/share"
                 sudo rsync -av --info=progress2 --info=name0 /home/$basename-1/.local/share/Steam /home/$basename-$i/.local/share
