@@ -10,10 +10,12 @@ Due to steam recently adding Recaptcha v2, you must provide accounts to the acco
 
 For support, visit us in [this](https://t.me/nullworks) channel.
 
-**Required Dependencies**
+## Required Dependencies
 Ubuntu/Debian
 `sudo apt-get install nodejs firejail net-tools x11-xserver-utils`
+
 Fedora/Centos
 `sudo dnf install nodejs firejail net-tools xorg-x11-server-utils`
+
 Arch/Manjaro (Recommended)
 `sudo pacman -Syu nodejs npm firejail net-tools xorg-xhost`
