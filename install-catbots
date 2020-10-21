@@ -161,6 +161,7 @@ if [ ! -f /opt/cathook/bin/libcathook-textmode.so ]; then
     fi
     popd
     sudo mkdir -p "/opt/cathook/bin/"
+    sudo mkdir -p "/opt/cathook/data/configs"
     sudo cp "build/bin/libcathook.so" "/opt/cathook/bin/libcathook-textmode.so"
     sudo chmod -R 0755 /opt/cathook/data/configs/
 fi
