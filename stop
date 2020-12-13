@@ -10,34 +10,7 @@ sudo rm /tmp/ncat-account-generator.pid
 sudo rm /tmp/ncat-cathook-webpanel.pid
 sudo rm /tmp/cat-ipc-server.pid
 
-xhost -
-
 ipcserver=$( ps faux | grep '/opt/cathook/ipc/bin/server' | grep -vw grep | awk '{ print $2 }' );
 [ ! -z "$ipcserver" ] && sudo kill ${ipcserver};
 ipcconsole=$( ps faux | grep '/opt/cathook/ipc/bin/console' | grep -vw grep | awk '{ print $2 }' );
 [ ! -z "$ipcconsole" ] && sudo kill ${ipcconsole};
-if [ -e "/tmp/pulsemodule.id" ]; then
-    pactl unload-module $(cat /tmp/pulsemodule.id)
-    rm /tmp/pulsemodule.id
-fi
-
-count=$(cat ./users);
-kisak=$(cat ./kisak);
-if [ -z "$count" ]
-then
-    echo "User count not found. Can't kill tf2 processes."
-else
-    if [ -z "$kisak" ]
-    then
-        echo "Username not found. Can't kill tf2 processes."
-    else
-        for i in $(seq 1 $count)
-        do
-            echo "Killing tf2 for ${kisak}-${i}"
-            tf2=$(pgrep -u "${kisak}-${i}" hl2_linux);
-            steam=$(pgrep -u "${kisak}-${i}" steam);
-            ([ ! -z "$tf2" ] || [ ! -z "$steam" ]) && sudo kill -9 $tf2 $steam
-        done
-    fi
-    sudo ./scripts/ns-delete $count
-fi

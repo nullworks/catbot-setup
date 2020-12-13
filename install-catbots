@@ -27,20 +27,12 @@ if [ ! -x "$(command -v firejail)" ]; then
     exit
 fi
 
-if [ ! -x "$(command -v route)" ] && [ ! -x /sbin/route ]; then
-    echo "Route doesn't exist. Please install it. (net-tools)"
-    exit
-fi
-
 if [ ! -x "$(command -v pgrep)" ]; then
     echo "Pgrep doesn't exist. Please install it."
     exit
 fi
 
-if [ ! -x "$(command -v xhost)" ]; then
-    echo "XHost doesn't exist. Please install it."
-    exit
-fi
+./remove-legacy
 
 if [ ! -d "./cathook" ]; then
     URL="$(curl --max-time 10 -Ls -o /dev/null -w %{url_effective} https://cathook.club/s/ch/git || echo error)"
@@ -60,106 +52,7 @@ echo "Copying navmeshes..."
 rsync catbot-database/nav\ meshes/*.nav ~/.steam/steam/steamapps/common/Team\ Fortress\ 2/tf/maps/
 chmod 755 ~/.steam/steam/steamapps/common/Team\ Fortress\ 2/tf/maps/*.nav # fixup permissions so tf2 is happy
 
-if [ ! -f ./kisak ]; then
-    echo Generating username and adding groups!
-    name=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 6 | head -n 1)
-    echo $name > kisak
-
-    sudo groupadd `cat kisak`s
-    sudo usermod -a -G `cat kisak`s $USER
-fi
-
-basename="$(cat kisak)"
-[ -z "$basename" ] && echo "Username file empty!" && exit 1
-
-if ! [ -e "/opt/steamapps" ]; then
-    pushd ~/.steam/steam/steamapps
-    steamapps="$(pwd -P)"
-    popd
-
-    while true; do
-        read -p "Is $steamapps your steamapps directory? y/n " yn
-        case $yn in
-            [Yy]* ) break;;
-            [Nn]* ) exit;;
-            * ) echo "Please answer yes or no.";;
-        esac
-    done
-    
-    sudo ln -s "$steamapps" "/opt/steamapps"
-
-    # fuck permissions!!!
-
-    sudo chown -h $USER:`cat kisak`s "/opt/steamapps"
-    sudo chown -R $USER:`cat kisak`s "$steamapps"
-    pushd $steamapps; while [ $(pwd) != "/" ]; do echo $(pwd); sudo chmod +x .; cd ..; done; popd
-    sudo chmod -R g+rwx "/opt/steamapps"
-    sudo chmod +x "/opt"
-    sudo chmod +x "/opt/steamapps"
-    sudo chmod -R go+X "$steamapps"
-fi
-
-if [ ! -f ./users ]; then
-    while true; do
-        re='^[0-9]+$'
-        read -p "How many bots would you like to host? " yournumber
-        if [[ $yournumber =~ $re ]] ; then
-            echo $yournumber > ./users
-            for i in $(seq 1 $yournumber)
-            do
-                if [ -d "/home/$basename-$i" ]; then
-                    echo "$basename-$i already exists"
-                    continue
-                fi
-                echo "Creating user $basename-$i"
-                sudo useradd -m $basename-$i
-                sudo usermod -g `cat kisak`s $basename-$i
-                sudo mkdir -p /home/$basename-$i
-                sudo chown `cat kisak`-$i:`cat kisak`s /home/$basename-$i
-                sudo -H -u $basename-$i bash -c "mkdir -p ~/.steam"
-                sudo -H -u $basename-$i bash -c "touch ~/.steam/steam_install_agreement.txt"
-            done
-            break
-        fi
-        echo "Error: Not a number" >&2
-    done
-fi
-
-if [ -f ./users ] && [ ! -f ./steams ]; then
-    xhost + >/dev/null
-    echo "Starting Steam for $basename-1"
-    sudo su - $basename-1 -c "DISPLAY=$DISPLAY steam &>/tmp/steam-$basename-1.log 2>&1 &"
-    read -p "Press enter if steam has reached the login screen. "
-    sudo kill -9 $(pgrep -u $basename-1 steam)
-
-    if ! sudo test -x "/home/$basename-1/.local/share/Steam/steam"; then
-        echo Garbage distro detected.
-        IS_GARBAGE_DISTRO=true
-        sudo rm -r "/home/$basename-1/.steam/steam/steamapps"
-        sudo -H -u $basename-1 bash -c "ln -s \"/opt/steamapps\" \"/home/$basename-1/.steam/steam\""
-    else
-        IS_GARBAGE_DISTRO=false
-        sudo rm -r "/home/$basename-1/.local/share/Steam/steamapps"
-        sudo -H -u $basename-1 bash -c "ln -s \"/opt/steamapps\" \"/home/$basename-1/.local/share/Steam\""
-    fi
-    
-    usercount=$(cat ./users)
-    if [ "$usercount" -ge "2" ]; then
-        for i in $(seq 2 $usercount)
-        do
-            echo "Copying Steam for $basename-$i"
-            if [ "$IS_GARBAGE_DISTRO" == true ]; then
-                sudo rsync -av --info=progress2 --info=name0 /home/$basename-1/.steam /home/$basename-$i/
-                sudo chown -R $basename-$i:$basename-$i "/home/$basename-$i/.steam"
-            else
-                sudo -H -u $basename-$i bash -c "mkdir -p /home/$basename-$i/.local/share"
-                sudo rsync -av --info=progress2 --info=name0 /home/$basename-1/.local/share/Steam /home/$basename-$i/.local/share
-                sudo chown -R $basename-$i:$basename-$i "/home/$basename-$i/.local/share/Steam"
-            fi
-        done
-    fi
-    touch ./steams
-fi
+mkdir -p user_instances
 
 if [ ! -f /opt/cathook/bin/libcathook-textmode.so ]; then
     numcpu=$(grep -c ^processor /proc/cpuinfo)

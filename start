@@ -9,12 +9,13 @@ if [ $EUID == 0 ]; then
     exit
 fi
 
-if ! [ -d "./account-generator" ]; then
+if ! [ -d "./user_instances" ]; then
 	echo "You need to run install-catbots first."
 	exit
 fi
 
-xhost +
+sudo mkdir -p /opt/steamapps
+sudo mount --bind ~/.local/share/Steam/steamapps/ /opt/steamapps || true
 
 ipcserver=$( ps faux | grep '/opt/cathook/ipc/bin/server' | grep -vw grep | awk '{ print $2 }' );
 [ -z "$ipcserver" ] && /opt/cathook/ipc/bin/server -s >/dev/null &
@@ -36,22 +37,9 @@ else
     popd
 fi
 
-if [ -x "$(command -v pulseaudio)" ]; then
-    echo "Setting up Pulseaudio socket"
-    pulse=$(pgrep -u "$USER" pulseaudio);
-    ([ ! -z "$pulse" ]) && pulseaudio --start &>/dev/null &
-    pactl load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse.sock > /tmp/pulsemodule.id
-fi
-
 sleep 5;
 
 echo "Account generator password: `cat /tmp/cat-accgen2-password`"
 echo "IPC Web Panel password: `cat /tmp/cat-webpanel-password`"
-
 echo "Fixing NVIDIA crash"
 sudo chmod 700 /opt/steamapps/common/Team\ Fortress\ 2/tf/glshaders.cfg
-echo "Fixed NVIDIA crash"
-
-echo "Creating namespaces"
-sudo ./scripts/ns-create $(cat ./users);
-echo "Done!"
