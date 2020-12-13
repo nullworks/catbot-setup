@@ -35,14 +35,17 @@ sudo mkdir -p "/opt/cathook/bin/"
 sudo cp "build/bin/libcathook.so" "/opt/cathook/bin/libcathook-textmode.so"
 
 pushd cathook-ipc-server
+git remote set-url origin https://github.com/nullworks/account-generator
 bash update.sh
 popd
 
 pushd cathook-ipc-web-panel
+git remote set-url origin https://github.com/nullworks/cathook-ipc-server
 bash update.sh
 popd
 
 pushd account-generator
+git remote set-url origin https://github.com/nullworks/cathook-ipc-web-panel
 bash update.sh
 popd
 

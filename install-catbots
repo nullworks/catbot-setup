@@ -17,6 +17,11 @@ if [ ! -x "$(command -v touch)" ]; then
     exit
 fi
 
+if [ ! -x "$(command -v route)" ] && [ ! -x /sbin/route ]; then
+    echo "Route doesn't exist. Please install it. (net-tools)"
+    exit
+fi
+
 if [ ! -x "$(command -v npm)" ]; then
     echo "NPM doesn't exist. Please install it. (npm)"
     exit
@@ -80,21 +85,21 @@ if [ ! -d "./just-disable-vac" ]; then
 fi
 
 if [ ! -d "./account-generator" ]; then
-    git clone --recursive https://gitlab.com/nullworks/cathook/account-generator
+    git clone --recursive https://github.com/nullworks/account-generator
     pushd account-generator
     ./install.sh
     popd
 fi
 
 if [ ! -d "./cathook-ipc-server" ]; then
-    git clone --recursive https://gitlab.com/nullworks/cathook/cathook-ipc-server
+    git clone --recursive https://github.com/nullworks/cathook-ipc-server
     pushd cathook-ipc-server
     ./install.sh
     popd
 fi
 
 if [ ! -d "./cathook-ipc-web-panel" ]; then
-    git clone --recursive https://gitlab.com/nullworks/cathook/cathook-ipc-web-panel
+    git clone --recursive https://github.com/nullworks/cathook-ipc-web-panel
     pushd cathook-ipc-web-panel
     ./install.sh
     popd
@@ -105,7 +110,7 @@ if [ ! -d "./cathook-ipc-web-panel/logs" ]; then
     touch ./cathook-ipc-web-panel/logs/main.log
 fi
 
-echo "Installation finished. Please ensure that all navmashes are inside your map folder (see https://gitlab.com/nullworks/cathook/catbot-database)."
+echo "Installation finished. Please ensure that all navmashes are inside your map folder (see https://github.com/nullworks/cathook/catbot-database)."
 echo
 echo "The web-panel and account storage can be started with ./start"
 echo
