@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-count=$1
-for i in $(seq 1 $count)
-do
-    ./scripts/ns-inet $i "$(route -n | grep '^0\.0\.0\.0' | grep -o '[^ ]*$' | head -1)"
-done
