@@ -12,10 +12,10 @@ For support, visit us in [this](https://t.me/nullworks) channel.
 
 ## Required Dependencies
 Ubuntu/Debian
-`sudo apt-get install nodejs firejail net-tools x11-xserver-utils`
+`sudo apt-get install nodejs firejail net-tools x11-xserver-utils libopenal1:i386 libcurl3-gnutls:i386 libfontconfig1:i386`
 
 Fedora/Centos
 `sudo dnf install nodejs firejail net-tools xorg-x11-server-utils`
 
 Arch/Manjaro (High Support)
-`sudo pacman -Syu nodejs npm firejail net-tools xorg-xhost`
+`sudo pacman -Syu nodejs npm firejail net-tools xorg-xhost steam-native`
