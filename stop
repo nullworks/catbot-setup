@@ -6,9 +6,7 @@
 
 [ -f /tmp/cat-ipc-server.pid ] && sudo kill $(cat /tmp/cat-ipc-server.pid)
 [ -f /tmp/ncat-cathook-webpanel.pid ] && PID="$(cat /tmp/ncat-cathook-webpanel.pid)" && sudo kill -SIGINT "$PID" && tail --pid="$PID" -f /dev/null
-[ -f /tmp/ncat-account-generator.pid ] && kill $(cat /tmp/ncat-account-generator.pid)
 
-[ -f /tmp/ncat-account-generator.pid ] && sudo rm /tmp/ncat-account-generator.pid
 [ -f /tmp/ncat-cathook-webpanel.pid ] && sudo rm /tmp/ncat-cathook-webpanel.pid
 [ -f /tmp/cat-ipc-server.pid ] && sudo rm /tmp/cat-ipc-server.pid
 

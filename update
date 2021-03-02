@@ -52,11 +52,6 @@ git remote set-url origin https://github.com/nullworks/cathook-ipc-web-panel
 bash update.sh
 popd
 
-pushd account-generator
-git remote set-url origin https://github.com/nullworks/account-generator
-bash update.sh
-popd
-
 
 echo "Fetching navmeshes..."
 if [ -d ./catbot-database ]; then

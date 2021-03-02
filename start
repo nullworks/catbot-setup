@@ -29,17 +29,8 @@ else
     popd
 fi
 
-if [ -e "/tmp/ncat-account-generator.pid" ] && ps -p `cat "/tmp/ncat-account-generator.pid"` >/dev/null; then
-    echo Account generator already running.
-else
-    pushd account-generator
-    node app >/tmp/cathook-accgen.log &
-    popd
-fi
-
 sleep 5;
 
-echo "Account generator password: `cat /tmp/cat-accgen2-password`"
 echo "IPC Web Panel password: `cat /tmp/cat-webpanel-password`"
 echo "Fixing NVIDIA crash"
 sudo chmod 700 /opt/steamapps/common/Team\ Fortress\ 2/tf/glshaders.cfg
