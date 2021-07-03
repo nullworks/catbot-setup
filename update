@@ -31,7 +31,7 @@ git submodule update --init --recursive
 popd
 mkdir -p build
 pushd build
-cmake -DCMAKE_BUILD_TYPE=Release -DVisuals_DrawType="Textmode" -DVACBypass=1 -DEnableWarnings=0 -DEnableOnlineFeatures=0 ../cathook/
+cmake -DCMAKE_BUILD_TYPE=Release -DVisuals_DrawType="Textmode" -DVACBypass=1 -DEnableWarnings=0 ../cathook/
 numcpu=$(grep -c ^processor /proc/cpuinfo)
 make -j$numcpu
 if ! [ -e "bin/libcathook.so" ]; then
