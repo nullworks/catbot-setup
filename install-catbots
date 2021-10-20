@@ -121,9 +121,9 @@ fi
 
 sudo sed -i 's/^restricted-network yes/# restricted-network yes/g' /etc/firejail/firejail.config
 
-echo "Installation finished. Please ensure that all navmashes are inside your map folder (see https://github.com/nullworks/cathook/catbot-database)."
+echo "Installation finished. Please ensure that all navmeshes are inside your maps folder (see https://github.com/nullworks/cathook/catbot-database)."
 echo
-echo "The web-panel and account storage can be started with ./start"
+echo "The web panel can be started with ./start"
 echo
-echo "Accgen is broken due to recent recaptcha updates, as well as us running out of accounts to provide. You must create your own list of accounts to use for catbots."
+echo "Accgen is broken due to recent reCAPTCHA updates, as well as us running out of accounts to provide. You must create your own list of accounts to use for catbots."
 echo "Create a list of steam accounts, and save them to catbot-setup/accounts.txt in username:password format."
