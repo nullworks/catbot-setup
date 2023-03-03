@@ -1,19 +1,7 @@
-#!/bin/bash
-
-#
-#       This script stops all processes of steam and TF2
-#
-
-[ -f /tmp/cat-ipc-server.pid ] && sudo kill $(cat /tmp/cat-ipc-server.pid)
-[ -f /tmp/ncat-cathook-webpanel.pid ] && PID="$(cat /tmp/ncat-cathook-webpanel.pid)" && sudo kill -SIGINT "$PID" && tail --pid="$PID" -f /dev/null
-[ -f /tmp/nnullnexus-proxy.pid ] && sudo kill $(cat /tmp/nnullnexus-proxy.pid)
-
-[ -f /tmp/ncat-cathook-webpanel.pid ] && sudo rm /tmp/ncat-cathook-webpanel.pid
-[ -f /tmp/nnullnexus-proxy.pid ] && sudo rm /tmp/nnullnexus-proxy.pid
-[ -f /tmp/cat-ipc-server.pid ] && sudo rm /tmp/cat-ipc-server.pid
-[ -f /tmp/pulsemodule.id ] && pactl unload-module $(cat /tmp/pulsemodule.id) && rm /tmp/pulsemodule.id
-
-ipcserver=$( ps faux | grep '/opt/cathook/ipc/bin/server' | grep -vw grep | awk '{ print $2 }' );
-[ ! -z "$ipcserver" ] && sudo kill ${ipcserver};
-ipcconsole=$( ps faux | grep '/opt/cathook/ipc/bin/console' | grep -vw grep | awk '{ print $2 }' );
-[ ! -z "$ipcconsole" ] && sudo kill ${ipcconsole};
+sudo pkill -9 -f /opt/cathook/ipc/bin/server
+sudo pkill -9 -f /opt/cathook/ipc/bin/console
+sudo pkill -9 -f PM2
+sudo pkill -9 -f firejail
+sudo pkill -9 -f node
+# stops catbot-setup.
+# WARNING THIS SCRIPT WILL CLOSE EVERY "NODE" PROCCESS!
