@@ -5,3 +5,4 @@ sudo pkill -9 -f firejail
 sudo pkill -9 -f node
 # stops catbot-setup.
 # WARNING THIS SCRIPT WILL CLOSE EVERY "NODE" PROCCESS!
+#
