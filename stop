@@ -20,3 +20,6 @@ ipcserver=$( ps faux | grep '/opt/cathook/ipc/server' | grep -vw grep | awk '{ p
 [ ! -z "$ipcserver" ] && sudo kill ${ipcserver};
 ipcconsole=$( ps faux | grep '/opt/cathook/ipc/console' | grep -vw grep | awk '{ print $2 }' );
 [ ! -z "$ipcconsole" ] && sudo kill ${ipcconsole};
+
+#lazy way to kill PM2 daemon (the start script will start the PM2 daemon)
+PATH="$PATH" pm2 kill
