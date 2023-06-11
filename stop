@@ -16,7 +16,7 @@ popd
 [ -f /tmp/cat-ipc-server.pid ] && sudo rm /tmp/cat-ipc-server.pid
 [ -f /tmp/pulsemodule.id ] && pactl unload-module $(cat /tmp/pulsemodule.id) && rm /tmp/pulsemodule.id
 
-ipcserver=$( ps faux | grep '/opt/cathook/ipc/bin/server' | grep -vw grep | awk '{ print $2 }' );
+ipcserver=$( ps faux | grep '/opt/cathook/ipc/server' | grep -vw grep | awk '{ print $2 }' );
 [ ! -z "$ipcserver" ] && sudo kill ${ipcserver};
-ipcconsole=$( ps faux | grep '/opt/cathook/ipc/bin/console' | grep -vw grep | awk '{ print $2 }' );
+ipcconsole=$( ps faux | grep '/opt/cathook/ipc/console' | grep -vw grep | awk '{ print $2 }' );
 [ ! -z "$ipcconsole" ] && sudo kill ${ipcconsole};
